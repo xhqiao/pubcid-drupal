@@ -1,0 +1,7 @@
+pubcid_cookie_management.settings:
+  path: '/admin/config/pubcid-cookie-management'
+  defaults:
+    _form: '\Drupal\pubcid_cookie_management\Form\PubcidCookieManagementConfigForm'
+    _title: 'Pubcid Cookie Management Configuration'
+  requirements:
+    _permission: 'access content'

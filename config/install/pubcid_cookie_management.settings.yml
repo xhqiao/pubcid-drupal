@@ -1,0 +1,5 @@
+cookie_name: ''
+max_age: 365
+cookie_path: '/'
+consent_function: ''
+generate_function: ''
