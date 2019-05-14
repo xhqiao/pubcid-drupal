@@ -5,3 +5,10 @@ pubcid_cookie_management.settings:
     _title: 'Pubcid Cookie Management Configuration'
   requirements:
     _permission: 'access content'
+
+pubcid_cookie_management:
+  path: '/tracking_pixel'
+  defaults:
+    _controller: '\Drupal\pubcid_cookie_management\Controller\PubcidCookieManagementController::onRespond'
+  requirements:
+    _permission: 'access content'

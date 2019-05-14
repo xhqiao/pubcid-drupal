@@ -1,6 +1,0 @@
-services:
-  my_event_subscriber:
-    class: '\Drupal\pubcid_cookie_management\EventSubscriber\PubcidEventSubscriber'
-    arguments: ['@current_route_match', '@current_user']
-    tags:
-    - { name: 'event_subscriber' }
