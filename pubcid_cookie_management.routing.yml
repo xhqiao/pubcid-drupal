@@ -4,7 +4,8 @@ pubcid_cookie_management.settings:
     _form: '\Drupal\pubcid_cookie_management\Form\PubcidCookieManagementConfigForm'
     _title: 'Pubcid Cookie Management Configuration'
   requirements:
-    _permission: 'access content'
+    _permission: 'pubcid config permission'
+
 
 pubcid_cookie_management:
   path: '/tracking_pixel'

@@ -1,5 +1,5 @@
 cookie_name: ''
 max_age: 365
-cookie_path: '/'
+cookie_domain: ''
 consent_function: ''
 generate_function: ''

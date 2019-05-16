@@ -8,9 +8,9 @@ pubcid_cookie_management:
     max_age:
       type: integer
       label: 'max_age'
-    cookie_path:
+    cookie_domain:
       type: string
-      label: 'cookie_path'
+      label: 'cookie_domain'
     consent_function:
       type: string
       label: 'consent_function'
