@@ -1,6 +1,6 @@
-pubcid_cookie_management:
+publisher_common_id:
   type: config_object
-  label: 'pubcid_cookie_management settings'
+  label: 'publisher_common_id settings'
   mapping:
     cookie_name:
       type: string

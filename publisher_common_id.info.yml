@@ -1,0 +1,6 @@
+name: Publisher Common ID
+type: module
+description: 'Publisher Common ID'
+core: 8.x
+package: Other
+configure: publisher_common_id.settings

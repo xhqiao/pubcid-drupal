@@ -1,0 +1,15 @@
+publisher_common_id.settings:
+  path: '/admin/config/publisher-common-id'
+  defaults:
+    _form: '\Drupal\publisher_common_id\Form\PublisherCommonIdConfigForm'
+    _title: 'Publisher Common Id Configuration'
+  requirements:
+    _permission: 'publisher common Id config permission'
+
+
+  publisher_common_id:
+    path: '/pubcid'
+    defaults:
+      _controller: '\Drupal\publisher_common_id\Controller\PublisherCommonIdController::extend'
+    requirements:
+      _permission: 'access content'

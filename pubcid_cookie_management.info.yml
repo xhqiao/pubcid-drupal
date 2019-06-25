@@ -1,6 +1,0 @@
-name: Pubcid Cookie Management
-type: module
-description: 'Manage _pubcid cookie'
-core: 8.x
-package: Other
-configure: pubcid_cookie_management.settings

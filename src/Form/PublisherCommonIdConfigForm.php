@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: xqiao
- * Date: 4/24/19
- * Time: 1:21 PM
- */
-
-namespace Drupal\pubcid_cookie_management\Form;
+namespace Drupal\publisher_common_id\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\FormInterface;
 
 /**
- * Provides settings for eu_cookie_compliance module.
+ * Provides settings for Publisher Common ID module
  */
-class PubcidCookieManagementConfigForm extends ConfigFormBase
+class PublisherCommonIdConfigForm extends ConfigFormBase implements FormInterface
 {
 
 
@@ -27,7 +21,7 @@ class PubcidCookieManagementConfigForm extends ConfigFormBase
      */
     protected function getEditableConfigNames()
     {
-        return ['pubcid_cookie_management.settings'];
+        return ['publisher_common_id.settings'];
     }
 
 
@@ -43,42 +37,34 @@ class PubcidCookieManagementConfigForm extends ConfigFormBase
      */
     public function getFormId()
     {
-        return 'pubcid_cookie_management_settings';
+        return 'publisher_common_id_settings';
     }
 
     /**
      * {@inheritdoc}
      */
     public function buildForm(array $form, FormStateInterface $form_state) {
-        $config = $this->config('pubcid_cookie_management.settings');
+        $config = $this->config('publisher_common_id.settings');
 
-        //Pubcid Cookie Extender Form
-        $form['pubcid_cookie_extender'] = [
+        //Publisher Common Id Form
+        $form['publisher_common_id'] = [
             '#type' => 'details',
-            '#title' => t('Pubcid Cookie Extender Configuration'),
+            '#title' => t('Publisher Common ID Configuration'),
             '#open' => TRUE,
         ];
 
         //Cookie Name
-        if ($config->get('cookie_name') == '') {
-            $cookie_name_default = 'example: _pubcid';
-        } else {
-            $cookie_name_default = $config->get('cookie_name');
-        }
-        $form['pubcid_cookie_extender']['cookie_name'] = [
+        $form['publisher_common_id']['cookie_name'] = [
 
             '#type' => 'textfield',
             '#title' => t('Cookie Name'),
-            '#default_value' => $cookie_name_default,
-            '#attributes' => array(
-                'onblur' => "if (this.value == '') {this.value = 'example: _pubcid'}",
-                'onfocus' => "if (this.value == 'example: _pubcid') {this.value = ''}"
-            , ),
+            '#placeholder' => t('example: _pubcid'),
+            '#description' => t('The default cookie name is _pubcid'),
         ];
 
         //Maximum Age
         $options = [7, 30, 90, 365];
-        $form['pubcid_cookie_extender']['max_age'] = [
+        $form['publisher_common_id']['max_age'] = [
             '#type' => 'select',
             '#title' => t('Max Age'),
             '#default_value' => $config->get('max_age'),
@@ -87,7 +73,7 @@ class PubcidCookieManagementConfigForm extends ConfigFormBase
         ];
 
         //Cookie Path
-        $form['pubcid_cookie_extender']['cookie_domain'] = [
+        $form['publisher_common_id']['cookie_domain'] = [
             '#type' => 'textfield',
             '#title' => t('Cookie Domain'),
             '#default_value' => $config->get('cookie_domain'),
@@ -95,38 +81,20 @@ class PubcidCookieManagementConfigForm extends ConfigFormBase
         ];
 
         //The Cookie Consent Function
-        if ($config->get('consent_function') == '') {
-            $consent_function_default = 'example: cn_cookie_accept';
-        } else {
-            $consent_function_default = $config->get('consent_function');
-        }
-        $form['pubcid_cookie_extender']['consent_function'] = [
+        $form['publisher_common_id']['consent_function'] = [
             '#type' => 'textfield',
             '#title' => t('Consent Function'),
-            '#default_value' => $consent_function_default,
-            '#attributes' => array(
-                'onblur' => "if (this.value == '') {this.value = 'example: cn_cookie_accept'}",
-                'onfocus' => "if (this.value == 'example: cn_cookie_accept') {this.value = ''}"
-            , ),
+            '#placeholder' => t('example: cn_cookies_accepted'),
             '#description' => t('If specified, then cookie is not updated unless the function returns true.'),
         ];
 
         //Cookie Value Generation Function
-        if ($config->get('generate_function') == '') {
-            $generate_function_default = 'example: dp_generate_uuid';
-        } else {
-            $generate_function_default = $config->get('generate_function');
-        }
-        $form['pubcid_cookie_extender']['generate_function'] = [
+        $form['publisher_common_id']['generate_function'] = [
             '#type' => 'textfield',
             '#title' => t('Generate Function'),
-            '#default_value' => $generate_function_default,
-            '#attributes' => array(
-                'onblur' => "if (this.value == '') {this.value = 'example: dp_generate_uuid'}",
-                'onfocus' => "if (this.value == 'example: dp_generate_uuid') {this.value = ''}"
-            , ),
+            '#placeholder' => t('example: dp_generate_uuid'),
             '#description' => t('If specified, then cookie is automatically generated using the value returned by the function.
-                           Enter Drupal\pubcid_cookie_management\Controller\pubcid_value_generation if you want to use the default one'),
+                           Enter Drupal\publisher_common_id\Controller\pubcid_value_generation if you want to use the default one'),
         ];
 
         return parent::buildForm($form, $form_state);
@@ -135,10 +103,28 @@ class PubcidCookieManagementConfigForm extends ConfigFormBase
     /**
      * {@inheritdoc}
      */
+    public function validateForm(array &$form, FormStateInterface $form_state)
+    {
+        $consent_function = $form_state->getValue('consent_function');
+        $uuid_generation =  $form_state->getValue('generate_function');
+
+        if(!empty($consent_function) && !is_callable($consent_function)) {
+            $form_state->setErrorByName('name', $this->t('Consent Function %name is not callable', ['%name' => $consent_function]));
+        }
+
+        if(!empty($uuid_generation) && $uuid_generation != 'Drupal\publisher_common_id\Controller\pubcid_value_generation' && !is_callable($uuid_generation)) {
+            $form_state->setErrorByName('name', $this->t('Generate Function %name is not callable', ['%name' => $uuid_generation]));
+        }
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
-        $this->config('pubcid_cookie_management.settings')
-            ->set('cookie_name', $form_state->getValue('cookie_name'))
+        $this->config('publisher_common_id.settings')
+            ->set('cookie_name', ($form_state->getValue('cookie_name')))
             ->set('max_age', $form_state->getValue('max_age'))
             ->set('cookie_domain', $form_state->getValue('cookie_domain'))
             ->set('consent_function', $form_state->getValue('consent_function'))
@@ -148,3 +134,5 @@ class PubcidCookieManagementConfigForm extends ConfigFormBase
         parent::submitForm($form, $form_state);
     }
 }
+
+

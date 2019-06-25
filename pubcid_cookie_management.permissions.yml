@@ -1,4 +1,0 @@
-pubcid config permission:
-  title: 'Pubcid Config Permission'
-  description: 'Permission to chnage pubcid configurations'
-  restrict access: true

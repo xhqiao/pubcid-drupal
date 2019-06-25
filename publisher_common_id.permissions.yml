@@ -1,0 +1,4 @@
+publisher common Id config permission:
+  title: 'Publisher Common Id Config Permission'
+  description: 'Permission to change publisher common Id configurations'
+  restrict access: true
